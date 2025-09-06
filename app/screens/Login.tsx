@@ -1,3 +1,5 @@
+// login/signup screen with Firebase Auth
+
 import { View, Text } from 'react-native'
 import React from 'react'
 

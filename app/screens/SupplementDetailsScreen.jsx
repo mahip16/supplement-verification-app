@@ -1,0 +1,1 @@
+// shows info after a scan

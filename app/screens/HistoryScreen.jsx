@@ -1,0 +1,1 @@
+// list of past scans from Firestore
