@@ -3,12 +3,11 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const Login = () => {
+// Testing login screen
+export default function Login() {
   return (
-    <View>
-      <Text>Login</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Login Screen</Text>
     </View>
-  )
+  );
 }
-
-export default Login

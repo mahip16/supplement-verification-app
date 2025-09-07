@@ -1,8 +1,8 @@
 // firebase/firestore.js
-import app from './FirebaseConfig';
+import { FIREBASE_APP } from './FirebaseConfig';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
-const db = getFirestore(app);
+const db = getFirestore(FIREBASE_APP);
 
 export const fetchSupplements = async () => {
   const querySnapshot = await getDocs(collection(db, "supplements"));
