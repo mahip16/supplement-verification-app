@@ -1,5 +1,3 @@
-// camera barcode scanner with Expo
-
 import { View, Text } from 'react-native'
 import React from 'react'
 import { Button } from '@react-navigation/elements';
@@ -9,14 +7,13 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-// Testing Scanner screen
-export default function Scanner() {
-    const navigation = useNavigation();
+// Testing profile screen
+export default function Profile() {
+  const navigation = useNavigation();
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Scanner Screen</Text>
-      {/* <Button onPressIn={() => navigation.goBack()}>Go back</Button> */}
+      <Text>Profile</Text>
     </View>
   );
 }
