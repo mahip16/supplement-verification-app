@@ -3,11 +3,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { Button } from '@react-navigation/elements';
-import {
-  createStaticNavigation,
-  useNavigation,
-} from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 // Testing Scanner screen
 export default function Scanner() {
