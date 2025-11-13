@@ -1,84 +1,282 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Alert, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { FIREBASE_AUTH } from '../../firebase/FirebaseConfig';
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail 
+} from 'firebase/auth';
 
-const LoginScreen = () => {
-  const handleLogin = () => {
-    console.log('Login pressed');
-    // Add your login logic here
+export default function Login() {
+  const navigation = useNavigation();
+  const [screen, setScreen] = useState('splash'); // splash, welcome, login, signup
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Auto-transition from splash to welcome after 2 seconds
+  useEffect(() => {
+    if (screen === 'splash') {
+      const timer = setTimeout(() => {
+        setScreen('welcome');
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [screen]);
+
+  const handleSignIn = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+    } catch (error) {
+      let errorMessage = 'Failed to sign in';
+      if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address';
+      } else if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password';
+      } else if (error.code === 'auth/invalid-credential') {
+        errorMessage = 'Invalid email or password';
+      }
+      Alert.alert('Sign In Failed', errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSignUp = () => {
-    console.log('Sign Up pressed');
-    // Add your sign up logic here
+  const handleSignUp = async () => {
+    if (!email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
+
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+      Alert.alert('Success', 'Account created successfully!');
+    } catch (error) {
+      let errorMessage = 'Failed to create account';
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'This email is already registered';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'Password is too weak';
+      }
+      Alert.alert('Sign Up Failed', errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleContinueAsGuest = () => {
-    console.log('Continue as Guest pressed');
-    // Add your guest logic here
-  };
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#E3F2FD" />
-      
-      <View style={styles.content}>
-        {/* Icon Container */}
-        <View style={styles.iconContainer}>
-          <View style={styles.iconBackground}>
-            <View style={styles.magnifyingGlass}>
-              <Ionicons name="search" size={40} color="#1976D2" />
-              <View style={styles.checkmark}>
-                <Ionicons name="checkmark" size={20} color="#4CAF50" />
-              </View>
-            </View>
+  // Splash Screen (Screen 1)
+  if (screen === 'splash') {
+    return (
+      <View style={styles.splashContainer}>
+        <View style={styles.logoContainer}>
+          <View style={styles.logoCircle}>
+            <Text style={styles.checkmark}>✓</Text>
           </View>
+          <View style={styles.magnifierHandle} />
+        </View>
+        <Text style={styles.appName}>SuppleScan</Text>
+      </View>
+    );
+  }
+
+  // Welcome Screen (Screen 2)
+  if (screen === 'welcome') {
+    return (
+      <View style={styles.welcomeContainer}>
+        <View style={styles.logoContainer}>
+          <View style={styles.logoCircle}>
+            <Text style={styles.checkmark}>✓</Text>
+          </View>
+          <View style={styles.magnifierHandle} />
+        </View>
+        
+        <TouchableOpacity 
+          style={[styles.button, styles.loginButton]}
+          onPress={() => setScreen('login')}
+        >
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.button, styles.signUpButton]}
+          onPress={() => setScreen('signup')}
+        >
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <Text style={styles.guestLink}>Continue As Guest</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  // Sign Up Screen (Screen 3)
+  if (screen === 'signup') {
+    return (
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
+        <View style={styles.formContainer}>
+          <View style={styles.logoSmall}>
+            <View style={styles.logoCircleSmall}>
+              <Text style={styles.checkmarkSmall}>✓</Text>
+            </View>
+            <View style={styles.magnifierHandleSmall} />
+          </View>
+
+          <Text style={styles.title}>Hello!</Text>
+          <Text style={styles.subtitle}>Create Your Account</Text>
+
+          <Text style={styles.formTitle}>Sign Up</Text>
+
+          <TextInput
+            style={styles.input}
+            placeholder="Email Address"
+            placeholderTextColor="#999"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            autoComplete="email"
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#999"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            autoCapitalize="none"
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            placeholderTextColor="#999"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+            autoCapitalize="none"
+          />
+
+          <TouchableOpacity
+            style={[styles.button, styles.primaryButton]}
+            onPress={handleSignUp}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>
+              {loading ? 'Loading...' : 'Sign up'}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => setScreen('welcome')}>
+            <Text style={styles.backLink}>← Back</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    );
+  }
+
+  // Login Screen (Screen 4)
+  return (
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <View style={styles.formContainer}>
+        <View style={styles.logoSmall}>
+          <View style={styles.logoCircleSmall}>
+            <Text style={styles.checkmarkSmall}>✓</Text>
+          </View>
+          <View style={styles.magnifierHandleSmall} />
         </View>
 
-        {/* Buttons Container */}
-        <View style={styles.buttonsContainer}>
-          {/* Login Button */}
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginButtonText}>Login</Text>
-          </TouchableOpacity>
+        <Text style={styles.title}>Welcome Back!</Text>
+        <Text style={styles.subtitle}>Login Below</Text>
 
-          {/* Sign Up Button */}
-          <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-            <Text style={styles.signUpButtonText}>Sign Up</Text>
-          </TouchableOpacity>
+        <Text style={styles.formTitle}>Login</Text>
 
-          {/* Continue as Guest */}
-          <TouchableOpacity onPress={handleContinueAsGuest}>
-            <Text style={styles.guestText}>Continue As Guest</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email Address"
+          placeholderTextColor="#999"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+          autoComplete="email"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#999"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          autoCapitalize="none"
+        />
+
+        <TouchableOpacity
+          style={[styles.button, styles.primaryButton]}
+          onPress={handleSignIn}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>
+            {loading ? 'Loading...' : 'Login'}
+          </Text>
+        </TouchableOpacity>
+
+        <View style={styles.registerContainer}>
+          <Text style={styles.registerText}>Don't have an account? </Text>
+          <TouchableOpacity onPress={() => setScreen('signup')}>
+            <Text style={styles.registerLink}>Register Now</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#E3F2FD',
-  },
-  content: {
+  // Splash Screen
+  splashContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
+    backgroundColor: '#c9e4ffff',
   },
-  iconContainer: {
-    marginBottom: 80,
+  logoContainer: {
+    position: 'relative',
+    marginBottom: 30,
   },
-  iconBackground: {
+  logoCircle: {
     width: 120,
     height: 120,
     borderRadius: 60,
@@ -86,92 +284,164 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 8,
-  },
-  magnifyingGlass: {
-    position: 'relative',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderWidth: 8,
+    borderColor: '#007AFF',
   },
   checkmark: {
+    fontSize: 60,
+    color: '#007AFF',
+    fontWeight: 'bold',
+  },
+  magnifierHandle: {
     position: 'absolute',
-    bottom: -5,
-    right: -5,
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    bottom: -20,
+    right: -15,
+    width: 50,
+    height: 12,
+    backgroundColor: '#007AFF',
+    borderRadius: 6,
+    transform: [{ rotate: '45deg' }],
+  },
+  appName: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+
+  // Welcome Screen
+  welcomeContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#c9e4ffff',
+    paddingHorizontal: 40,
+  },
+  button: {
+    width: '100%',
+    maxWidth: 300,
+    padding: 15,
+    borderRadius: 25,
+    alignItems: 'center',
+    marginVertical: 8,
+  },
+  loginButton: {
+    backgroundColor: '#1e3a5f',
+  },
+  signUpButton: {
+    backgroundColor: '#007AFF',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  guestLink: {
+    marginTop: 20,
+    color: '#007AFF',
+    fontSize: 14,
+    textDecorationLine: 'underline',
+  },
+
+  // Login/SignUp Screens
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#c9e4ffff',
+  },
+  formContainer: {
+    width: '85%',
+    maxWidth: 400,
+    alignItems: 'center',
+  },
+  logoSmall: {
+    position: 'relative',
+    marginBottom: 20,
+  },
+  logoCircleSmall: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 5,
+    borderWidth: 6,
+    borderColor: '#007AFF',
   },
-  buttonsContainer: {
-    width: '100%',
-    alignItems: 'center',
+  checkmarkSmall: {
+    fontSize: 40,
+    color: '#007AFF',
+    fontWeight: 'bold',
   },
-  loginButton: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#1E3A8A',
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+  magnifierHandleSmall: {
+    position: 'absolute',
+    bottom: -12,
+    right: -10,
+    width: 35,
+    height: 8,
+    backgroundColor: '#007AFF',
+    borderRadius: 4,
+    transform: [{ rotate: '45deg' }],
   },
-  loginButtonText: {
-    color: 'white',
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 5,
+  },
+  subtitle: {
     fontSize: 16,
-    fontWeight: '600',
+    color: '#666',
+    marginBottom: 30,
   },
-  signUpButton: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#3B82F6',
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
+  formTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#333',
+    alignSelf: 'flex-start',
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
   },
-  signUpButtonText: {
-    color: 'white',
-    fontSize: 16,
+  input: {
+    width: '100%',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 15,
+    fontSize: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#333',
+  },
+  primaryButton: {
+    backgroundColor: '#007AFF',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  registerText: {
+    color: '#333',
+    fontSize: 14,
+  },
+  registerLink: {
+    color: '#007AFF',
+    fontSize: 14,
     fontWeight: '600',
   },
-  guestText: {
-    color: '#3B82F6',
-    fontSize: 16,
-    fontWeight: '500',
-    textDecorationLine: 'underline',
+  backLink: {
+    color: '#007AFF',
+    fontSize: 14,
+    marginTop: 10,
   },
 });
-
-export default LoginScreen;
