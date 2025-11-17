@@ -11,16 +11,7 @@ export default function Home() {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home Screen</Text>
-      <Button onPressIn={() => navigation.navigate('Scanner')}>
-              Scanner
-            </Button>
-      <Button onPressIn={() => navigation.navigate('History')}>
-              History
-      <Button onPressIn={()=> navigation.navigate('Profile')}>
-              Profile
-      </Button>
-      </Button>
+      <Text>Home</Text>
     </View>
   );
 }

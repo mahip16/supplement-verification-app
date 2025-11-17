@@ -12,13 +12,12 @@ import WelcomeScreen from './Screens/WelcomeScreen';
 import LoginScreen from './Screens/Login';
 import SignUpScreen from './Screens/SignUpScreen';
 
-// App Screens
-import HomeScreen from './Screens/HomeScreen';
-import HistoryScreen from './Screens/HistoryScreen';
+// Tab Navigator (contains Home, Scanner, History, Profile)
+import MainTabs from './Screens/MainTabs';
+
+// Other Screens
 import FirebaseTestScreen from './Screens/FirebaseTestScreen';
-import ScannerScreen from './Screens/ScannerScreen';
 import SupplementDetails from './Screens/SupplementDetailsScreen';
-import Profile from './Screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -55,26 +54,11 @@ export default function App() {
         {user ? (
           // User is signed in - show app screens
           <>
-            <Stack.Screen 
-              name="Home" 
-              component={HomeScreen} 
-              options={{ 
-                title: 'Home',
-                headerBackVisible: false,
-              }}
-            />
-            <Stack.Screen 
-              name="Scanner" 
-              component={ScannerScreen} 
-              options={{ 
-                title: 'Scanner'
-              }}
-            />
             <Stack.Screen
-              name="History"
-              component={HistoryScreen}
+              name='MainTabs'
+              component={MainTabs}
               options={{
-                title: 'History'
+                headerShown: false,
               }}
             />
             <Stack.Screen
@@ -82,13 +66,6 @@ export default function App() {
               component={SupplementDetails}
               options={{
                 title: 'Details'
-              }}
-            />
-            <Stack.Screen
-              name='Profile'
-              component={Profile}
-              options={{
-                title: 'Profile'
               }}
             />
             <Stack.Screen 
@@ -126,12 +103,12 @@ export default function App() {
                 headerBackVisible: true,
               }}
             />
-            {/* Allow guest access to Home */}
+            {/* Allow guest access to Tabs */}
             <Stack.Screen 
-              name="Home" 
-              component={HomeScreen} 
+              name="MainTabs" 
+              component={MainTabs} 
               options={{ 
-                title: 'Home (Guest)',
+                title: 'Guest Mode',
                 headerBackVisible: true,
               }}
             />
