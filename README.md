@@ -1,83 +1,89 @@
-📱 SuppleScan
+<h1 style="font-size: 40px; font-weight: 800; margin-bottom: 0;">📱 SuppleScan</h1>
+<span style="font-size: 20px;">A supplement verification & tracking app built with React Native, Expo, and Firebase</span>
 
-A supplement verification & tracking app built with React Native, Expo, and Firebase
+SuppleScan helps users verify supplement products by scanning barcodes and retrieving trusted product information. The app includes secure authentication, real-time cloud syncing, and a polished mobile interface.
 
-SuppleScan helps users quickly verify supplement products by scanning barcodes and retrieving trusted product information. The app provides secure authentication, a clean and intuitive UI, and real-time data storage using Firebase.
+<h2 style="font-size: 34px; font-weight: 800;">🚀 Features</h2>
+<h3 style="font-size: 26px; font-weight: 700;">🔒 User Authentication</h3>
 
-🚀 Features
-🔒 User Authentication
-- Email/password sign-up & login
-- Firebase Authentication with secure session handling
+- Email/password signup and login
 
-📸 Barcode Scanning
-- Real-time scanning powered by Expo’s camera API
-- Fast and accurate detection for UPC barcodes
-- Auto-fetches supplement information from Firestore
+- Secure session handling via Firebase Auth
 
-📦 Product Verification
-- Displays verified supplement details
-- Flags unknown or unverified products
-- Product search & history (if included in your version)
+<h3 style="font-size: 26px; font-weight: 700;">📸 Barcode Scanning</h3>
 
-☁️ Real-Time Cloud Integration
-- Firebase Firestore for storing product metadata
-- Real-time syncing across authenticated devices
-- Safe reads and writes with Firestore security rules
+- Real-time scanning using Expo Camera
 
-🎨 Polished Mobile UI
-- Built with React Native & Expo
-- Responsive layout and clean component architecture
-- Consistent color palette + user-friendly navigation
+- Accurate detection for UPC barcodes
 
-🛠️ Tech Stack
-Frontend:
-- React Native
-- Expo
-- JavaScript / TypeScript (if applicable)
-Backend:
-- Firebase Authentication
-- Firebase Firestore
-- Firebase Storage (if used for images)
-Additional Tools:
-- Expo Barcode Scanner
-- React Navigation
-- Git & GitHub for version control
+- Auto-fetches supplement details
 
-🔧 Installation & Setup
-Make sure you have Node.js, Git, and Expo CLI installed.
+<h3 style="font-size: 26px; font-weight: 700;">📦 Product Verification</h3>
 
-# Clone the repository
+- Displays verified supplement name, brand, ingredients (if added)
+
+- Flags unverified or unknown products
+
+- History or search (if included)
+
+<h3 style="font-size: 26px; font-weight: 700;">☁️ Cloud Integration</h3>
+
+- Firebase Firestore for product metadata
+
+- Real-time syncing across devices
+
+- Secure Firestore rules
+
+<h3 style="font-size: 26px; font-weight: 700;">🎨 Clean Mobile UI</h3>
+
+- React Native + Expo
+
+- Responsive layout & reusable components
+
+<h2 style="font-size: 34px; font-weight: 800;">🛠️ Tech Stack</h2>
+
+Frontend: React Native, Expo, JavaScript/TypeScript
+Backend: Firebase Auth, Firestore, Firebase Storage
+Tools: Expo Barcode Scanner, React Navigation, GitHub
+
+
+<h2 style="font-size: 34px; font-weight: 800;">🔧 Installation & Setup</h2>
 git clone https://github.com/mahip16/SuppleScan.git
 cd SuppleScan
-
-# Install dependencies
 npm install
-
-# Start the Expo development server
 npx expo start
 
 
-Open the app using:
-- Expo Go on iOS/Android
-- Or an emulator/simulator
+Open on your phone using Expo Go or run it on a simulator.
 
-📘 How It Works
-1. User signs in using Firebase Authentication
-2. Scan a supplement using the barcode scanner
-3. SuppleScan checks Firestore for a matching UPC
+<h2 style="font-size: 34px; font-weight: 800;">📘 How It Works</h2>
+
+1. User logs in via Firebase Auth
+
+2. User scans a supplement barcode
+
+3. Firestore checks for a matching UPC
+
 4. If found → displays product details
-5. If not found → flags as unknown or prompts admin verification
-6. Users can view previously scanned products (if implemented)
 
-🧪 Future Enhancements
-- Product ingredient breakdown
-- AI-powered supplement safety checker
-- User dashboards & health tracking
+5. If not → flags as unverified
+
+6. User can view previous scans
+
+<h2 style="font-size: 34px; font-weight: 800;">🧪 Future Enhancements</h2>
+
+- Ingredient breakdown
+
+- AI safety analysis
+
+- User dashboard + daily tracking
+
+- Admin console
+
 - Dark mode
-- Admin console for adding new supplements
 
-👤 Author
+<h2 style="font-size: 34px; font-weight: 800;">👤 Author</h2>
+
 Mahi Patel
 Computer Science @ Toronto Metropolitan University
 GitHub: github.com/mahip16
-LinkedIn: www.linkedin.com/in/mahiptl 
