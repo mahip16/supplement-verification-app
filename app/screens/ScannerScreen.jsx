@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,6 +9,8 @@ export default function Scanner() {
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [flashEnabled, setFlashEnabled] = useState(false);
+  const [scannedData, setScannedData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Request permissions when component loads
   useEffect(() => {
@@ -22,29 +24,24 @@ export default function Scanner() {
     if (scanned) return; // Prevent multiple scans
     
     setScanned(true);
+    setScannedData({ type, data });
+    setShowModal(true);
     console.log('Scanned:', type, data);
+  };
 
-    // Show what was scanned
-    Alert.alert(
-      'Supplement Scanned!',
-      `Barcode: ${data}`,
-      [
-        {
-          text: 'Scan Another',
-          onPress: () => setScanned(false),
-        },
-        {
-          text: 'View Details',
-          onPress: () => {
-            navigation.navigate('SupplementDetails', {
-              barcode: data,
-              barcodeType: type,
-            });
-            setScanned(false); // Reset for next scan
-          },
-        },
-      ]
-    );
+  const handleViewDetails = () => {
+    setShowModal(false);
+    setScanned(false);
+    navigation.navigate('SupplementDetails', {
+      barcode: scannedData.data,
+      barcodeType: scannedData.type,
+    });
+  };
+
+  const handleScanAnother = () => {
+    setShowModal(false);
+    setScanned(false);
+    setScannedData(null);
   };
 
   // Show loading while checking permissions
@@ -78,13 +75,13 @@ export default function Scanner() {
         enableTorch={flashEnabled}
         barcodeScannerSettings={{
           barcodeTypes: [
-            'upc_a',    // US product barcodes
-            'upc_e',    // Small US barcodes
-            'ean13',    // European product barcodes
-            'ean8',     // Small European barcodes
-            'code128',  // Shipping codes
-            'code39',   // Some supplements use this
-            'qr',       // QR codes
+            'upc_a',
+            'upc_e',
+            'ean13',
+            'ean8',
+            'code128',
+            'code39',
+            'qr',
           ],
         }}
         onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -123,20 +120,43 @@ export default function Scanner() {
                 {flashEnabled ? 'Flash On' : 'Flash Off'}
               </Text>
             </TouchableOpacity>
-
-            {/* Scan again button (shows after scanning) */}
-            {scanned && (
-              <TouchableOpacity
-                style={styles.scanAgainButton}
-                onPress={() => setScanned(false)}
-              >
-                <Ionicons name="scan" size={24} color="white" />
-                <Text style={styles.scanAgainText}>Scan Again</Text>
-              </TouchableOpacity>
-            )}
           </View>
         </View>
       </CameraView>
+
+      {/* Custom Modal Instead of Alert */}
+      <Modal
+        visible={showModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={handleScanAnother}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Ionicons name="checkmark-circle" size={60} color="#34C759" />
+            <Text style={styles.modalTitle}>Supplement Scanned!</Text>
+            <Text style={styles.modalBarcode}>
+              Barcode: {scannedData?.data}
+            </Text>
+            
+            <TouchableOpacity 
+              style={styles.modalButtonPrimary}
+              onPress={handleViewDetails}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.modalButtonPrimaryText}>View Details</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.modalButtonSecondary}
+              onPress={handleScanAnother}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.modalButtonSecondaryText}>Scan Another</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -246,19 +266,70 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
   },
-  scanAgainButton: {
-    flexDirection: 'row',
+  
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 30,
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 400,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginTop: 15,
+    marginBottom: 10,
+  },
+  modalBarcode: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 30,
+  },
+  modalButtonPrimary: {
     backgroundColor: '#007AFF',
-    paddingHorizontal: 30,
+    paddingHorizontal: 40,
     paddingVertical: 15,
     borderRadius: 25,
+    width: '100%',
+    marginBottom: 12,
     alignItems: 'center',
-    marginTop: 20,
   },
-  scanAgainText: {
+  modalButtonPrimaryText: {
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
-    marginLeft: 10,
+  },
+  modalButtonSecondary: {
+    backgroundColor: 'transparent',
+    paddingHorizontal: 40,
+    paddingVertical: 15,
+    borderRadius: 25,
+    width: '100%',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#007AFF',
+  },
+  modalButtonSecondaryText: {
+    color: '#007AFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
