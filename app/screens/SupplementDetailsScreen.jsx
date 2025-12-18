@@ -317,6 +317,29 @@ export default function SupplementDetails() {
       // Only save if user is logged in
       if (!user) return;
 
+      // Check if this barcode was scanned recently (within last minute)
+      const scansRef = collection(FIREBASE_DB, 'users', user.uid, 'scans');
+      const recentScansQuery = query(
+        scansRef, 
+        orderBy('scannedAt', 'desc'), 
+        limit(5)
+      );
+      const recentScans = await getDocs(recentScansQuery);
+      
+      // Check if same barcode exists in recent scans (last minute)
+      const oneMinuteAgo = new Date(Date.now() - 60000);
+      const isDuplicate = recentScans.docs.some(doc => {
+        const data = doc.data();
+        const scannedAt = data.scannedAt?.toDate();
+        return data.barcode === barcode && scannedAt > oneMinuteAgo;
+      });
+
+      // Don't save if it's a duplicate
+      if (isDuplicate) {
+        console.log('⏭️ Skipped - already in history');
+        return;
+      }
+
       // Save to user's scan history
       await addDoc(collection(FIREBASE_DB, 'users', user.uid, 'scans'), {
         barcode: barcode,
@@ -332,7 +355,6 @@ export default function SupplementDetails() {
       console.log('✓ Saved to history');
     } catch (error) {
       console.error('Error saving to history:', error);
-      // Don't show error to user - history save is background operation
     }
   };
 

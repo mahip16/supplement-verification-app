@@ -346,116 +346,118 @@ export default function HistoryScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header with Stats */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Scan History</Text>
-        <View style={styles.statsRow}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{stats.total}</Text>
-            <Text style={styles.statLabel}>Total</Text>
+      {/* Fixed Header with Stats */}
+      <View style={styles.fixedHeader}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Scan History</Text>
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{stats.total}</Text>
+              <Text style={styles.statLabel}>Total</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={[styles.statValue, { color: '#34C759' }]}>{stats.safeCount}</Text>
+              <Text style={styles.statLabel}>Safe</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={[styles.statValue, { color: '#FF9500' }]}>{stats.cautionCount}</Text>
+              <Text style={styles.statLabel}>Caution</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={[styles.statValue, { color: '#FF3B30' }]}>{stats.avoidCount}</Text>
+              <Text style={styles.statLabel}>Avoid</Text>
+            </View>
           </View>
-          <View style={styles.statItem}>
-            <Text style={[styles.statValue, { color: '#34C759' }]}>{stats.safeCount}</Text>
-            <Text style={styles.statLabel}>Safe</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={[styles.statValue, { color: '#FF9500' }]}>{stats.cautionCount}</Text>
-            <Text style={styles.statLabel}>Caution</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={[styles.statValue, { color: '#FF3B30' }]}>{stats.avoidCount}</Text>
-            <Text style={styles.statLabel}>Avoid</Text>
-          </View>
+          {stats.mostScanned !== 'None' && (
+            <Text style={styles.insightText}>
+              Most scanned: {stats.mostScanned}
+            </Text>
+          )}
         </View>
-        {stats.mostScanned !== 'None' && (
-          <Text style={styles.insightText}>
-            Most scanned: {stats.mostScanned}
-          </Text>
-        )}
-      </View>
 
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search products or brands..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholderTextColor="#999"
-        />
-        {searchQuery.length > 0 && (
-          <TouchableOpacity onPress={() => setSearchQuery('')}>
-            <Ionicons name="close-circle" size={20} color="#666" />
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search products or brands..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholderTextColor="#999"
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery('')}>
+              <Ionicons name="close-circle" size={20} color="#666" />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Filter Bar */}
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          style={styles.filterBar}
+          contentContainerStyle={styles.filterBarContent}
+        >
+          <TouchableOpacity
+            style={[styles.filterChip, selectedFilter === 'all' && styles.filterChipActive]}
+            onPress={() => setSelectedFilter('all')}
+          >
+            <Text style={[styles.filterChipText, selectedFilter === 'all' && styles.filterChipTextActive]}>
+              All
+            </Text>
           </TouchableOpacity>
-        )}
+
+          <TouchableOpacity
+            style={[styles.filterChip, selectedFilter === 'safe' && styles.filterChipActive]}
+            onPress={() => setSelectedFilter('safe')}
+          >
+            <Text style={[styles.filterChipText, selectedFilter === 'safe' && styles.filterChipTextActive]}>
+              🟢 Safe
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.filterChip, selectedFilter === 'caution' && styles.filterChipActive]}
+            onPress={() => setSelectedFilter('caution')}
+          >
+            <Text style={[styles.filterChipText, selectedFilter === 'caution' && styles.filterChipTextActive]}>
+              🟡 Caution
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.filterChip, selectedFilter === 'avoid' && styles.filterChipActive]}
+            onPress={() => setSelectedFilter('avoid')}
+          >
+            <Text style={[styles.filterChipText, selectedFilter === 'avoid' && styles.filterChipTextActive]}>
+              🔴 Avoid
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.filterDivider} />
+
+          <TouchableOpacity
+            style={[styles.filterChip, sortBy === 'date' && styles.filterChipActive]}
+            onPress={() => setSortBy('date')}
+          >
+            <Text style={[styles.filterChipText, sortBy === 'date' && styles.filterChipTextActive]}>
+              📅 Recent
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.filterChip, sortBy === 'score' && styles.filterChipActive]}
+            onPress={() => setSortBy('score')}
+          >
+            <Text style={[styles.filterChipText, sortBy === 'score' && styles.filterChipTextActive]}>
+              ⭐ Best Score
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
 
-      {/* Filter Bar */}
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        style={styles.filterBar}
-        contentContainerStyle={styles.filterBarContent}
-      >
-        <TouchableOpacity
-          style={[styles.filterChip, selectedFilter === 'all' && styles.filterChipActive]}
-          onPress={() => setSelectedFilter('all')}
-        >
-          <Text style={[styles.filterChipText, selectedFilter === 'all' && styles.filterChipTextActive]}>
-            All
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.filterChip, selectedFilter === 'safe' && styles.filterChipActive]}
-          onPress={() => setSelectedFilter('safe')}
-        >
-          <Text style={[styles.filterChipText, selectedFilter === 'safe' && styles.filterChipTextActive]}>
-            🟢 Safe
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.filterChip, selectedFilter === 'caution' && styles.filterChipActive]}
-          onPress={() => setSelectedFilter('caution')}
-        >
-          <Text style={[styles.filterChipText, selectedFilter === 'caution' && styles.filterChipTextActive]}>
-            🟡 Caution
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.filterChip, selectedFilter === 'avoid' && styles.filterChipActive]}
-          onPress={() => setSelectedFilter('avoid')}
-        >
-          <Text style={[styles.filterChipText, selectedFilter === 'avoid' && styles.filterChipTextActive]}>
-            🔴 Avoid
-          </Text>
-        </TouchableOpacity>
-
-        <View style={styles.filterDivider} />
-
-        <TouchableOpacity
-          style={[styles.filterChip, sortBy === 'date' && styles.filterChipActive]}
-          onPress={() => setSortBy('date')}
-        >
-          <Text style={[styles.filterChipText, sortBy === 'date' && styles.filterChipTextActive]}>
-            📅 Recent
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.filterChip, sortBy === 'score' && styles.filterChipActive]}
-          onPress={() => setSortBy('score')}
-        >
-          <Text style={[styles.filterChipText, sortBy === 'score' && styles.filterChipTextActive]}>
-            ⭐ Best Score
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
-
-      {/* Scan List */}
+      {/* Scrollable Scan List */}
       <FlatList
         data={filteredScans}
         renderItem={renderScanItem}
@@ -642,8 +644,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     paddingTop: 60,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    paddingBottom: 15,
+  },
+  fixedHeader: {
+    backgroundColor: 'white',
   },
   headerTitle: {
     fontSize: 28,
@@ -680,7 +684,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    margin: 15,
+    marginHorizontal: 15,
     marginBottom: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
@@ -699,6 +703,7 @@ const styles = StyleSheet.create({
   filterBar: {
     backgroundColor: 'white',
     paddingVertical: 10,
+    paddingBottom: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
