@@ -289,19 +289,50 @@ export default function SupplementDetails() {
       const allergens = detectAllergens(result.data.ingredients, result.data.allergensText);
       const caffeine = detectCaffeine(result.data.ingredients, result.data.nutriments);
       
-      setAnalysis({
+      const analysisData = {
         category,
         ingredients: analyzedIngredients,
         score: overallScore,
         allergens,
         caffeine,
-      });
+      };
+      
+      setAnalysis(analysisData);
+      
+      // Auto-save to history (background operation)
+      saveToHistory(result.data, analysisData);
       
     } catch (err) {
       console.error('Error:', err);
       setError('Failed to load product data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const saveToHistory = async (productData, analysis) => {
+    try {
+      const user = FIREBASE_AUTH.currentUser;
+      
+      // Only save if user is logged in
+      if (!user) return;
+
+      // Save to user's scan history
+      await addDoc(collection(FIREBASE_DB, 'users', user.uid, 'scans'), {
+        barcode: barcode,
+        barcodeType: barcodeType,
+        productName: productData.name,
+        brand: productData.brand,
+        category: analysis.category,
+        score: parseFloat(analysis.score.score),
+        image: productData.imageThumbnail || productData.image,
+        scannedAt: new Date(),
+      });
+
+      console.log('✓ Saved to history');
+    } catch (error) {
+      console.error('Error saving to history:', error);
+      // Don't show error to user - history save is background operation
     }
   };
 
