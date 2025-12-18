@@ -63,7 +63,28 @@ const ALLERGENS = {
 const categorizeProduct = (productData) => {
   const name = (productData.name + ' ' + productData.categoriesText).toLowerCase();
   
-  if (name.includes('protein') || name.includes('whey')) return 'Protein Powder';
+  // Check if it's actually a supplement first
+  const supplementKeywords = [
+    'supplement', 'vitamin', 'mineral', 'protein powder', 'whey', 'casein',
+    'pre-workout', 'pre workout', 'creatine', 'bcaa', 'amino', 'fat burner',
+    'mass gainer', 'dietary supplement', 'nutritional supplement', 'omega',
+    'fish oil', 'probiotic', 'collagen', 'multivitamin', 'electrolyte'
+  ];
+  
+  const isSupplement = supplementKeywords.some(keyword => name.includes(keyword));
+  
+  // If it's not a supplement, detect what it is
+  if (!isSupplement) {
+    if (name.includes('chocolate') || name.includes('candy') || name.includes('sweet')) return 'Food - Sweet/Snack';
+    if (name.includes('spread') || name.includes('butter') || name.includes('jam')) return 'Food - Spread';
+    if (name.includes('drink') || name.includes('beverage') || name.includes('juice')) return 'Beverage';
+    if (name.includes('cereal') || name.includes('breakfast')) return 'Food - Breakfast';
+    if (name.includes('snack') || name.includes('bar')) return 'Food - Snack';
+    return 'Food Product';
+  }
+  
+  // If it IS a supplement, categorize it
+  if (name.includes('protein') || name.includes('whey') || name.includes('casein')) return 'Protein Powder';
   if (name.includes('pre-workout') || name.includes('pre workout')) return 'Pre-Workout';
   if (name.includes('vitamin')) return 'Vitamin';
   if (name.includes('creatine')) return 'Creatine';
@@ -71,8 +92,12 @@ const categorizeProduct = (productData) => {
   if (name.includes('fat burn') || name.includes('weight loss')) return 'Fat Burner';
   if (name.includes('mass gainer')) return 'Mass Gainer';
   if (name.includes('mineral')) return 'Mineral';
+  if (name.includes('omega') || name.includes('fish oil')) return 'Omega-3 / Fish Oil';
+  if (name.includes('probiotic')) return 'Probiotic';
+  if (name.includes('collagen')) return 'Collagen';
+  if (name.includes('multivitamin')) return 'Multivitamin';
   
-  return 'Supplement';
+  return 'Dietary Supplement';
 };
 
 // Analyze ingredients
@@ -366,6 +391,16 @@ export default function SupplementDetails() {
     return '🔴';
   };
 
+  const getCategoryStyle = (category) => {
+    const isFood = category.startsWith('Food') || category === 'Beverage';
+    return {
+      icon: isFood ? '🍽️' : '🧴',
+      backgroundColor: isFood ? '#FF9500' : '#007AFF',
+    };
+  };
+
+  const categoryStyle = getCategoryStyle(analysis.category);
+
   return (
     <ScrollView style={styles.container}>
       {/* 1️⃣ PRODUCT HEADER - Quick Overview */}
@@ -379,12 +414,27 @@ export default function SupplementDetails() {
         )}
         <Text style={styles.productName}>{productData.name}</Text>
         <Text style={styles.brandName}>🏷️ {productData.brand}</Text>
-        <View style={styles.categoryBadge}>
-          <Text style={styles.categoryText}>🧴 {analysis.category}</Text>
+        <View style={[styles.categoryBadge, { backgroundColor: categoryStyle.backgroundColor }]}>
+          <Text style={styles.categoryText}>{categoryStyle.icon} {analysis.category}</Text>
         </View>
       </View>
 
+      {/* Food Product Notice */}
+      {(analysis.category.startsWith('Food') || analysis.category === 'Beverage') && (
+        <View style={styles.foodNotice}>
+          <Ionicons name="information-circle" size={24} color="#FF9500" />
+          <View style={styles.foodNoticeContent}>
+            <Text style={styles.foodNoticeTitle}>This is not a supplement</Text>
+            <Text style={styles.foodNoticeText}>
+              SuppleScan is designed for dietary supplements. This product is a regular food item.
+              The analysis below is limited.
+            </Text>
+          </View>
+        </View>
+      )}
+
       {/* 3️⃣ OVERALL SCORE - Quick Decision */}
+      <View style={styles.scoreCard}></View>
       <View style={styles.scoreCard}>
         <View style={styles.scoreHeader}>
           <Text style={styles.scoreTitle}>Overall Rating</Text>
@@ -646,6 +696,31 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
+  },
+  
+  // Food Product Notice
+  foodNotice: {
+    backgroundColor: '#FFF3E0',
+    padding: 15,
+    marginBottom: 10,
+    flexDirection: 'row',
+    borderLeftWidth: 4,
+    borderLeftColor: '#FF9500',
+  },
+  foodNoticeContent: {
+    marginLeft: 12,
+    flex: 1,
+  },
+  foodNoticeTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FF9500',
+    marginBottom: 5,
+  },
+  foodNoticeText: {
+    fontSize: 13,
+    color: '#666',
+    lineHeight: 18,
   },
   
   // Sections
