@@ -10,7 +10,9 @@ import {
   Alert,
   RefreshControl,
   Modal,
-  ScrollView
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -543,44 +545,82 @@ export default function HistoryScreen() {
         visible={showNoteModal}
         transparent={true}
         animationType="slide"
-        onRequestClose={() => setShowNoteModal(false)}
+        onRequestClose={() => {
+          setShowNoteModal(false);
+          setNoteText('');
+        }}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.noteModal}>
-            <Text style={styles.noteModalTitle}>Add Note</Text>
-            <Text style={styles.noteModalSubtitle}>{selectedScan?.productName}</Text>
-            
-            <TextInput
-              style={styles.noteInput}
-              placeholder="e.g., Made me feel bloated, Too sweet, Good price at Costco"
-              value={noteText}
-              onChangeText={setNoteText}
-              multiline
-              numberOfLines={4}
-              maxLength={200}
-              placeholderTextColor="#999"
-            />
+        <TouchableOpacity 
+          style={styles.noteModalOverlay}
+          activeOpacity={1}
+          onPress={() => {
+            setShowNoteModal(false);
+            setNoteText('');
+          }}
+        >
+          <TouchableOpacity 
+            activeOpacity={1}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+              <View style={styles.noteModal}>
+                <View style={styles.noteModalHeader}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.noteModalTitle}>Add Note</Text>
+                    <Text style={styles.noteModalSubtitle} numberOfLines={1}>
+                      {selectedScan?.productName}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowNoteModal(false);
+                      setNoteText('');
+                    }}
+                  >
+                    <Ionicons name="close" size={28} color="#666" />
+                  </TouchableOpacity>
+                </View>
+                
+                <TextInput
+                  style={styles.noteInput}
+                  placeholder="e.g., Made me feel bloated, Too sweet, Good price at Costco"
+                  value={noteText}
+                  onChangeText={setNoteText}
+                  multiline
+                  maxLength={200}
+                  placeholderTextColor="#999"
+                  autoFocus
+                  textAlignVertical="top"
+                />
 
-            <View style={styles.noteModalButtons}>
-              <TouchableOpacity
-                style={styles.noteModalButtonCancel}
-                onPress={() => {
-                  setShowNoteModal(false);
-                  setNoteText('');
-                }}
-              >
-                <Text style={styles.noteModalButtonTextCancel}>Cancel</Text>
-              </TouchableOpacity>
+                <Text style={styles.characterCount}>
+                  {noteText.length}/200
+                </Text>
 
-              <TouchableOpacity
-                style={styles.noteModalButtonSave}
-                onPress={saveNote}
-              >
-                <Text style={styles.noteModalButtonTextSave}>Save Note</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+                <View style={styles.noteModalButtons}>
+                  <TouchableOpacity
+                    style={styles.noteModalButtonCancel}
+                    onPress={() => {
+                      setShowNoteModal(false);
+                      setNoteText('');
+                    }}
+                  >
+                    <Text style={styles.noteModalButtonTextCancel}>Cancel</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.noteModalButtonSave}
+                    onPress={saveNote}
+                  >
+                    <Text style={styles.noteModalButtonTextSave}>Save Note</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </KeyboardAvoidingView>
+          </TouchableOpacity>
+        </TouchableOpacity>
       </Modal>
     </View>
   );
