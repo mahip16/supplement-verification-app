@@ -18,6 +18,7 @@ import MainTabs from './Screens/MainTabs';
 // Other Screens
 import FirebaseTestScreen from './Screens/FirebaseTestScreen';
 import SupplementDetails from './Screens/SupplementDetailsScreen';
+import FavouritesScreen from './Screens/FavouritesScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +60,13 @@ export default function App() {
               component={MainTabs}
               options={{
                 headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name='Favourites'
+              component={FavouritesScreen}
+              options={{
+              title: 'Favourites'
               }}
             />
             <Stack.Screen
