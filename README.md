@@ -1,202 +1,226 @@
-# 📦 SuppleScan
+# SuppleScan 🔬
 
-**A mobile app that verifies supplement products by scanning barcodes and providing safety insights.**
+> **Know exactly what you're putting in your body.**
 
----
+A full-stack mobile application that empowers fitness enthusiasts and health-conscious individuals to make informed decisions about dietary supplements — instantly, by scanning a barcode.
 
-## 📖 Overview
-
-SuppleScan helps fitness enthusiasts and health-conscious individuals make informed decisions about dietary supplements. By simply scanning a product's barcode, users can instantly view detailed ingredient breakdowns, safety scores, allergen warnings, and personalized recommendations. The app tracks your supplement history and saves your favorites, making it easy to stay on top of your health routine.
-
----
-
-## ✨ Features
-
-### 🔐 Authentication
-- Email and password signup/login with Firebase
-- Guest mode available
-- Secure session management
-
-### 📷 Barcode Scanning
-- Real-time camera barcode detection
-- Supports UPC, EAN, Code128, and QR codes
-- Flash toggle for low-light environments
-
-### 🧴 Product Analysis
-- Fetches data from Open Food Facts API
-- Safety score (0-10 scale) with color-coded ratings: 🟢 Safe / 🟡 Caution / 🔴 Avoid
-- Detailed ingredient breakdown with safety info
-- Allergen detection (dairy, soy, gluten, nuts, eggs, shellfish)
-- Caffeine content warnings
-
-### 📊 Dashboard & Tracking
-- View total scans and statistics
-- Daily supplement tips
-- Personalized health alerts
-- Recent scan history
-
-### 📜 History & Favorites
-- Search and filter scan history
-- Add personal notes to scans
-- Save favorites for quick access
-- Pull-to-refresh sync
-
-### 👤 Profile
-- Account management
-- App information and settings
-- Sign in/out functionality
+[![React Native](https://img.shields.io/badge/React_Native-Expo-20232A?style=flat&logo=react)](https://expo.dev/)
+[![Firebase](https://img.shields.io/badge/Firebase-Auth_%2B_Firestore-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat&logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Open Food Facts](https://img.shields.io/badge/API-Open_Food_Facts-336791?style=flat)](https://world.openfoodfacts.org/)
+[![EAS Update](https://img.shields.io/badge/EAS-Deployed-4630EB?style=flat&logo=expo)](https://expo.dev/accounts/mahiptl/projects/SuppleScan/updates/18c400b2-c164-41c4-8cb2-2f2b26d00651)
 
 ---
 
-## 🗂️ Screens
+## 🚀 Live Demo
 
-- **Home** – Dashboard with stats and quick actions
-- **Scanner** – Camera barcode scanner
-- **History** – Past scans with search and filters
-- **Profile** – User settings and app info
-- **Favourites** – Saved supplements
-- **Supplement Details** – Product analysis and safety breakdown
+**Deployed via Expo EAS** — try it on your device right now:
+
+1. Download [Expo Go](https://expo.dev/go) on your iOS or Android device
+2. Open this link on your phone: [**Launch SuppleScan**](https://expo.dev/accounts/mahiptl/projects/SuppleScan/updates/18c400b2-c164-41c4-8cb2-2f2b26d00651)
+3. Tap "Open in Expo Go"
 
 ---
 
-## 📁 Project Structure
+## The Problem
+
+The supplement industry is a $167 billion market with minimal consumer transparency. Labels are confusing, ingredient lists are long, and hidden allergens are dangerous. Most people scan a barcode at the grocery store and have no idea what they're actually buying.
+
+SuppleScan changes that in under 3 seconds.
+
+---
+
+## What It Does
+
+Point your camera at any supplement barcode. SuppleScan cross-references the product against a live ingredient safety database and returns an instant analysis, safety score, allergen flags, caffeine warnings, and a full ingredient breakdown, all before you leave the store aisle.
+
+---
+
+## Features
+
+### Authentication
+- Email/password signup and login via Firebase Auth
+- Guest mode for frictionless first-time use
+- Persistent session management across app restarts
+
+### Real-Time Barcode Scanning
+- Live camera feed with real-time barcode detection
+- Supports UPC, EAN, Code128, and QR code formats
+- Flash toggle for low-light scanning environments
+
+### Intelligent Product Analysis
+- Live product data fetched from the Open Food Facts API (1M+ products)
+- Proprietary safety scoring algorithm, 0 to 10 scale with color-coded ratings
+  - 🟢 **Safe** - clean ingredients, no flags
+  - 🟡 **Caution** - review recommended
+  - 🔴 **Avoid** - significant concerns detected
+- Full ingredient-by-ingredient breakdown with individual safety notes
+- Allergen detection across 6 major categories: dairy, soy, gluten, nuts, eggs, shellfish
+- Caffeine content analysis with consumption warnings
+
+### Personal Dashboard
+- Lifetime scan counter and usage statistics
+- Daily supplement health tips
+- Personalized alerts based on your scan history
+- Recent scan activity feed
+
+### History & Favorites
+- Full searchable scan history with filtering
+- Add personal notes to any past scan
+- One-tap save to Favorites for quick re-access
+- Pull-to-refresh sync across sessions
+
+### User Profile
+- Account management and preferences
+- App settings and information
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Framework | React Native + Expo | Cross-platform mobile (iOS + Android) |
+| Language | JavaScript (ES6+) | Application logic |
+| Navigation | React Navigation | Screen routing and tab management |
+| Auth | Firebase Authentication | Secure user accounts and sessions |
+| Database | Cloud Firestore | Real-time NoSQL data persistence |
+| Camera | Expo Camera API | Barcode scanning and flash control |
+| External API | Open Food Facts API | Product and ingredient data |
+
+---
+
+## Architecture
 
 ```
 supplescan/
-├── .expo/
 ├── api/
-│   └── openFoodFactsAPI.js
+│   └── openFoodFactsAPI.js       # API integration layer
 ├── app/
 │   └── Screens/
-│       ├── FavouritesScreen.jsx
-│       ├── FirebaseTestScreen.jsx
-│       ├── HistoryScreen.jsx
-│       ├── HomeScreen.jsx
-│       ├── Login.jsx
-│       ├── MainTabs.jsx
-│       ├── ProfileScreen.jsx
-│       ├── ScannerScreen.jsx
-│       ├── SignUpScreen.jsx
-│       ├── SplashScreen.jsx
-│       ├── SupplementDetailsScreen.jsx
-│       ├── WelcomeScreen.jsx
-│       ├── index.jsx
-│       └── test.jsx
-├── assets/
-│   └── icon.png
+│       ├── HomeScreen.jsx         # Dashboard + stats
+│       ├── ScannerScreen.jsx      # Camera + barcode detection
+│       ├── SupplementDetailsScreen.jsx  # Safety analysis results
+│       ├── HistoryScreen.jsx      # Scan history + search
+│       ├── FavouritesScreen.jsx   # Saved supplements
+│       ├── ProfileScreen.jsx      # User settings
+│       ├── Login.jsx              # Authentication
+│       ├── SignUpScreen.jsx       # User registration
+│       └── MainTabs.jsx           # Tab navigation controller
 ├── firebase/
-│   ├── auth.js
-│   ├── FirebaseConfig.js
-│   └── firestore.js
-├── node_modules/
-├── .gitignore
-├── app.json
-├── metro.config.js
-├── package-lock.json
-├── package.json
-└── README.md
+│   ├── FirebaseConfig.js          # Project configuration
+│   ├── auth.js                    # Auth service layer
+│   └── firestore.js               # Database service layer
+└── assets/
+    └── icon.png
 ```
 
 ---
 
-## 🛠️ Tech Stack
-
-| Component | Technology |
-|-----------|-----------|
-| **Framework** | React Native + Expo |
-| **Language** | JavaScript |
-| **Navigation** | React Navigation |
-| **Backend** | Firebase (Auth + Firestore) |
-| **Camera** | Expo Camera API |
-| **Data Source** | Open Food Facts API |
-
----
-
-## 🔧 How It Works
-
-1. User creates account or continues as guest
-2. User scans a supplement barcode with camera
-3. App fetches product data from Open Food Facts API
-4. App analyzes ingredients using built-in safety database
-5. App displays safety score, ingredient breakdown, and warnings
-6. Scan saved to user's history in Firestore
-7. User can add to favorites or add notes
-
----
-
-## 📥 Setup / Installation
+## Getting Started
 
 ### Prerequisites
-- Node.js (v16+)
+- Node.js v16+
 - Expo CLI: `npm install -g expo-cli`
+- Expo Go app on your iOS or Android device
+- A Firebase project (free tier is sufficient)
 
-### Steps
+### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/mahip16/SuppleScan.git
-   cd SuppleScan
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/mahip16/supplement-verification-app.git
+cd supplement-verification-app
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+# Install dependencies
+npm install
+```
 
-3. **Set up Firebase**
-   - Create project at [Firebase Console](https://console.firebase.google.com/)
-   - Enable Authentication (Email/Password)
-   - Create Firestore Database
-   - Add config to `firebase/FirebaseConfig.js`
+### Firebase Setup
 
-4. **Run the app**
-   ```bash
-   npx expo start
-   ```
+1. Create a project at [Firebase Console](https://console.firebase.google.com/)
+2. Enable **Authentication** → Email/Password provider
+3. Create a **Firestore Database** in production mode
+4. Copy your config object into `firebase/FirebaseConfig.js`:
 
-5. **Open on device**
-   - Scan QR code with Expo Go app
-   - Or press `i` (iOS) / `a` (Android)
+```js
+const firebaseConfig = {
+  apiKey: "your-api-key",
+  authDomain: "your-project.firebaseapp.com",
+  projectId: "your-project-id",
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "your-sender-id",
+  appId: "your-app-id"
+};
+```
 
----
+### Run the App
 
-## 🚀 Future Improvements
+```bash
+npx expo start
+```
 
-- AI-powered ingredient explanations
-- Supplement comparison tool
-- Alternative product recommendations
-- Dosage tracking
-- Dark mode
-- Offline mode with cached data
-- Export history as PDF/CSV
-- Multi-language support
-- Integration with fitness apps
+Scan the QR code with Expo Go, or press `i` for iOS simulator / `a` for Android emulator.
 
 ---
 
-## ⚠️ Disclaimer
+## How It Works
 
-**This app is for informational purposes only and does not provide medical advice.**
-
-Always consult a qualified healthcare professional before starting any supplement regimen. Individual results may vary. Product data is sourced from Open Food Facts and accuracy may vary.
+```
+User scans barcode
+        ↓
+Expo Camera detects barcode value
+        ↓
+App calls Open Food Facts API with barcode
+        ↓
+Ingredient list extracted from API response
+        ↓
+Safety algorithm scores each ingredient
+        ↓
+Aggregate score + allergen flags computed
+        ↓
+Results displayed with full breakdown
+        ↓
+Scan saved to user's Firestore history
+```
 
 ---
 
-## 👤 Author
+## Roadmap
 
-**Mahi Patel**  
+- [ ] AI-powered natural language ingredient explanations
+- [ ] Side-by-side supplement comparison tool
+- [ ] Alternative product recommendations for flagged items
+- [ ] Daily dosage tracking and reminders
+- [ ] Dark mode
+- [ ] Offline mode with cached product data
+- [ ] Export history as PDF or CSV
+- [ ] Multi-language support
+- [ ] Integration with Apple Health and Google Fit
+
+---
+
+## Disclaimer
+
+SuppleScan is for **informational purposes only** and does not constitute medical advice. Always consult a qualified healthcare professional before beginning any supplement regimen. Product data is sourced from Open Food Facts — accuracy may vary by product.
+
+---
+
+## Author
+
+**Mahi Patel**
 Computer Science @ Toronto Metropolitan University
 
-🔗 GitHub: [@mahip16](https://github.com/mahip16)
+[GitHub](https://github.com/mahip16) · [LinkedIn](https://linkedin.com/in/mahip16)
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- [Open Food Facts](https://world.openfoodfacts.org/) – Product database
-- [Expo](https://expo.dev/) – Development framework
-- [Firebase](https://firebase.google.com/) – Backend services
+- [Open Food Facts](https://world.openfoodfacts.org/) — open-source product database
+- [Expo](https://expo.dev/) — React Native development platform
+- [Firebase](https://firebase.google.com/) — backend infrastructure
 
 ---
 
-**Version 1.0.0** | Built with ❤️ for fitness enthusiasts
+*Built to solve a real problem. Scan smarter.*
