@@ -449,7 +449,7 @@ export default function SupplementDetails() {
   const getCategoryStyle = (category) => {
     const isFood = category.startsWith('Food') || category === 'Beverage';
     return {
-      icon: isFood ? '🍽️' : '🧴',
+      icon: isFood ? '🍽️' : '💊',
       backgroundColor: isFood ? '#FF9500' : '#007AFF',
     };
   };
