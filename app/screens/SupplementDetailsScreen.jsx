@@ -487,7 +487,6 @@ export default function SupplementDetails() {
       )}
 
       {/* 3️⃣ OVERALL SCORE - Quick Decision */}
-      <View style={styles.scoreCard}></View>
       <View style={styles.scoreCard}>
         <View style={styles.scoreHeader}>
           <Text style={styles.scoreTitle}>Overall Rating</Text>
