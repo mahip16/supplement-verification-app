@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { 
   View, 
   Text, 
@@ -16,6 +17,7 @@ import { collection, getDocs, query, orderBy, deleteDoc, doc } from 'firebase/fi
 
 export default function FavouritesScreen() {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const [favourites, setFavourites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -228,7 +230,7 @@ export default function FavouritesScreen() {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 20 }]}>
         <Text style={styles.headerTitle}>Favourites</Text>
         <Text style={styles.headerSubtitle}>
           {favourites.length} saved supplement{favourites.length !== 1 ? 's' : ''}
@@ -266,7 +268,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
     padding: 20,
-    paddingTop: 60,
+    paddingTop: 20,
     paddingBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
