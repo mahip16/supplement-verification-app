@@ -2,7 +2,7 @@
 
 > **Know exactly what you're putting in your body.**
 
-A full-stack mobile application that empowers fitness enthusiasts and health-conscious individuals to make informed decisions about dietary supplements — instantly, by scanning a barcode.
+A full-stack mobile application that empowers fitness enthusiasts and health-conscious individuals to make informed decisions about dietary supplements, instantly, by scanning a barcode.
 
 [![React Native](https://img.shields.io/badge/React_Native-Expo-20232A?style=flat&logo=react)](https://expo.dev/)
 [![Firebase](https://img.shields.io/badge/Firebase-Auth_%2B_Firestore-FFCA28?style=flat&logo=firebase)](https://firebase.google.com/)
@@ -14,7 +14,7 @@ A full-stack mobile application that empowers fitness enthusiasts and health-con
 
 ## 🚀 Live Demo
 
-**Deployed via Expo EAS** — try it on your device right now:
+**Deployed via Expo EAS** - try it on your device right now:
 
 1. Download [Expo Go](https://expo.dev/go) on your iOS or Android device
 2. Open this link on your phone: [**Launch SuppleScan**](https://expo.dev/accounts/mahiptl/projects/SuppleScan/updates/18c400b2-c164-41c4-8cb2-2f2b26d00651)
