@@ -48,7 +48,8 @@ export default function App() {
   }
 
   return (
-      <Stack.Navigator 
+    <NavigationContainer>
+       <Stack.Navigator
         screenOptions={{
           contentStyle: { backgroundColor: '#c9e4ffff' },
         }}
@@ -123,6 +124,7 @@ export default function App() {
             />
           </>
         )}
-      </Stack.Navigator>
+       </Stack.Navigator>
+     </NavigationContainer>
   );
 }

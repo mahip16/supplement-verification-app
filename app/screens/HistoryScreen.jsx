@@ -908,6 +908,12 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 20,
   },
+  noteModalHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
   noteModalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -917,7 +923,6 @@ const styles = StyleSheet.create({
   noteModalSubtitle: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 20,
   },
   noteInput: {
     borderWidth: 1,
