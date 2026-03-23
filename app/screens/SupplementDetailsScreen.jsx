@@ -68,7 +68,9 @@ const categorizeProduct = (productData) => {
     'supplement', 'vitamin', 'mineral', 'protein powder', 'whey', 'casein',
     'pre-workout', 'pre workout', 'creatine', 'bcaa', 'amino', 'fat burner',
     'mass gainer', 'dietary supplement', 'nutritional supplement', 'omega',
-    'fish oil', 'probiotic', 'collagen', 'multivitamin', 'electrolyte'
+    'fish oil', 'probiotic', 'collagen', 'multivitamin', 'electrolyte',
+    'protein shake', 'plant protein', 'plant-based', 'shake', 'vegan protein',
+    'meal replacement', 'sports nutrition', 'pea protein', 'hemp protein'
   ];
   
   const isSupplement = supplementKeywords.some(keyword => name.includes(keyword));
