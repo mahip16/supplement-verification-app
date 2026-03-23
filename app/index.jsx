@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebase/FirebaseConfig';
 
+
 // Auth Screens
 import SplashScreen from './Screens/SplashScreen';
 import WelcomeScreen from './Screens/WelcomeScreen';

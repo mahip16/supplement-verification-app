@@ -27,7 +27,7 @@ export default function WelcomeScreen() {
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+      <TouchableOpacity onPress={() => navigation.navigate('MainTabs')}>
         <Text style={styles.guestLink}>Continue As Guest</Text>
       </TouchableOpacity>
     </View>
