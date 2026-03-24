@@ -20,6 +20,7 @@ import MainTabs from './Screens/MainTabs';
 import FirebaseTestScreen from './Screens/FirebaseTestScreen';
 import SupplementDetails from './Screens/SupplementDetailsScreen';
 import FavouritesScreen from './Screens/FavouritesScreen';
+import { FA5Style } from '@expo/vector-icons/build/FontAwesome5';
 
 const Stack = createNativeStackNavigator();
 
@@ -101,16 +102,14 @@ export default function App() {
               name="Login" 
               component={LoginScreen} 
               options={{ 
-                title: 'Login',
-                headerBackVisible: true,
+                headerShown: false,
               }}
             />
             <Stack.Screen 
               name="SignUp" 
               component={SignUpScreen} 
               options={{ 
-                title: 'Sign Up',
-                headerBackVisible: true,
+                headerShown: false,
               }}
             />
             {/* Allow guest access to Tabs */}

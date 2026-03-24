@@ -3,17 +3,15 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebase/FirebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-
-//fixed navigation
-// added new screens 
-// added scroll view in signup/login
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const handleSignIn = async () => {
     if (!email || !password) {
@@ -47,7 +45,16 @@ export default function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-       <ScrollView
+    <View style={{ alignItems: 'flex-start', paddingTop: insets.top + 10, paddingLeft: 15, paddingBottom: 10 }}>
+      <TouchableOpacity 
+        onPress={() => navigation.goBack()}
+        style={{ paddingRight: 330 }}
+      >
+        <Ionicons name="arrow-back" size={24} color="#333" />
+      </TouchableOpacity>
+    </View>
+
+    <ScrollView
       contentContainerStyle={{
         flexGrow: 1,
         justifyContent: 'center',
@@ -116,7 +123,6 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#c9e4ffff',
   },

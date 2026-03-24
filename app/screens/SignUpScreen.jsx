@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebase/FirebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+
 
 export default function SignUpScreen() {
   const navigation = useNavigation();
@@ -10,6 +13,7 @@ export default function SignUpScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const handleSignUp = async () => {
     if (!email || !password || !confirmPassword) {
@@ -52,6 +56,15 @@ export default function SignUpScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
+    <View style={{ alignItems: 'flex-start', paddingTop: insets.top + 10, paddingLeft: 15, paddingBottom: 10 }}>
+      <TouchableOpacity 
+        onPress={() => navigation.goBack()}
+        style={{ paddingRight: 330 }}
+      >
+        <Ionicons name="arrow-back" size={24} color="#333" />
+      </TouchableOpacity>
+    </View>
+    
        <ScrollView
         contentContainerStyle={{
         flexGrow: 1,
