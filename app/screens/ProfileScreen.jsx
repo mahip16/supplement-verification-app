@@ -11,10 +11,19 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { FIREBASE_AUTH } from '../../firebase/FirebaseConfig';
 import { signOut } from 'firebase/auth';
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const user = FIREBASE_AUTH.currentUser;
+  const [user, setUser] = useState(FIREBASE_AUTH.currentUser);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (firebaseUser) => {
+      setUser(firebaseUser);
+      });
+      return unsubscribe;
+    }, []);
 
   const handleSignOut = () => {
     Alert.alert(
