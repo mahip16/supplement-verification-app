@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
     padding: 20,
-    paddingTop: 90,
+    paddingTop: 80,
     paddingBottom: 20,
   },
   welcomeText: {
