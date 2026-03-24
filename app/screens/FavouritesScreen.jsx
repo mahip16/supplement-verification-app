@@ -36,6 +36,7 @@ export default function FavouritesScreen() {
       if (!user) {
         setFavourites([]);
         setLoading(false);
+        setRefreshing(false);
         return;
       }
 

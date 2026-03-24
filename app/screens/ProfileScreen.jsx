@@ -88,8 +88,14 @@ export default function ProfileScreen() {
         <View style={styles.card}>
           <TouchableOpacity 
             style={styles.row}
-            onPress={() => navigation.navigate('Favourites')}  // CHANGED
-          >
+              onPress={() => {
+                if (!user) {
+                  navigation.navigate('Welcome');
+                } else {
+                  navigation.navigate('Favourites');
+                }
+              }}
+            >
             <View style={styles.rowLeft}>
               <Ionicons name="heart" size={22} color="#FF3B30" />
               <Text style={styles.rowText}>Favorites</Text>
@@ -237,7 +243,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
     padding: 30,
-    paddingTop: 60,
+    paddingTop: 90,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',

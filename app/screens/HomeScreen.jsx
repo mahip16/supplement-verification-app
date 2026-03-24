@@ -13,6 +13,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase/FirebaseConfig';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 // Daily tips rotation
 const DAILY_TIPS = [
@@ -402,7 +404,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: 'white',
     padding: 20,
-    paddingTop: 60,
+    paddingTop: 90,
     paddingBottom: 20,
   },
   welcomeText: {

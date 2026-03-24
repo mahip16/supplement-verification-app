@@ -22,6 +22,8 @@ import SupplementDetails from './Screens/SupplementDetailsScreen';
 import FavouritesScreen from './Screens/FavouritesScreen';
 import { FA5Style } from '@expo/vector-icons/build/FontAwesome5';
 
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -49,6 +51,7 @@ export default function App() {
   }
 
   return (
+    <SafeAreaProvider>
     <NavigationContainer>
        <Stack.Navigator
         screenOptions={{
@@ -117,13 +120,13 @@ export default function App() {
               name="MainTabs" 
               component={MainTabs} 
               options={{ 
-                title: 'Guest Mode',
-                headerBackVisible: true,
+                headerShown: false,
               }}
             />
           </>
         )}
        </Stack.Navigator>
      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
