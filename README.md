@@ -10,6 +10,9 @@ A full-stack mobile application that empowers fitness enthusiasts and health-con
 [![Open Food Facts](https://img.shields.io/badge/API-Open_Food_Facts-336791?style=flat)](https://world.openfoodfacts.org/)
 [![EAS Update](https://img.shields.io/badge/EAS-Deployed-4630EB?style=flat&logo=expo)](https://expo.dev/accounts/mahiptl/projects/SuppleScan/updates/18c400b2-c164-41c4-8cb2-2f2b26d00651)
 
+<img src="assets/demo.gif" width="300"/>
+
+
 ---
 
 ## 🚀 Live Demo
